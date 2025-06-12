@@ -8,6 +8,7 @@ from scipy.ndimage import convolve
 import matplotlib.pyplot as plt
 from laspy import read
 
+
 def voxelize_point_cloud(points, voxel_size=0.03):
     min_bound = points.min(axis=0)
     max_bound = points.max(axis=0)
@@ -43,6 +44,7 @@ def create_z_voxel_grid(points, voxel_size):
     z_grid[mask] = sum_grid[mask] / count_grid[mask]
 
     return z_grid, min_bound
+
 def detect_edges(voxel_grid, threshold=1.5):
     # Z-gradient kernel: detects vertical signal difference (horizontal edge)
     z_gradient_kernel = np.zeros((3, 3, 3))
@@ -57,6 +59,7 @@ def detect_edges(voxel_grid, threshold=1.5):
 
     return np.argwhere(edges)
 
+
 def visualize_edges(edge_voxels_world):
     pcd = o3d.geometry.PointCloud()
     pcd.points = o3d.utility.Vector3dVector(edge_voxels_world)
@@ -67,6 +70,7 @@ def visualize_edges(edge_voxels_world):
         window_name="Edge Voxels (Z Gradient)",
         point_show_normal=False
     )
+
 
 def main():
     # ---- Load LAS file ----
@@ -90,6 +94,7 @@ def main():
 
     # ---- Visualize ----
     visualize_edges(edge_voxels_world)
+
 
 if __name__ == "__main__":
     main()
