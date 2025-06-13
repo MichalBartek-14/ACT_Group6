@@ -84,28 +84,41 @@ def main():
     if not os.path.exists(file_path):
         raise FileNotFoundError("File not found.")
 
+    """"the parameters to alter:"""
+    defined_voxel_size = 0.02
+    #-----------z-gradient values-------#
+    defined_compensation_power = 1.0
+    defined_base_threshold = 16000
+    #-----------clustering--------------#
+    defined_eps = 4
+    defined_min_samples = 10
+
+
     print("Loading point cloud...")
     points, reflectivity = load_las_point_cloud(file_path)
     print(
         f"Reflectivity stats: min={np.min(reflectivity)}, max={np.max(reflectivity)}, mean={np.mean(reflectivity):.4f}")
 
     print("Voxelizing reflectivity...")
-    voxel_grid, min_bound, voxel_size = voxelize_reflectivity(points, reflectivity, voxel_size=0.02)
+    voxel_grid, min_bound, voxel_size = voxelize_reflectivity(points, reflectivity, voxel_size=defined_voxel_size)
 
     non_empty_voxels = np.count_nonzero(~np.isnan(voxel_grid))
     total_voxels = voxel_grid.size
     print(f"Non-empty voxels: {non_empty_voxels} / {total_voxels} ({100 * non_empty_voxels / total_voxels:.2f}%)")
 
     print("Computing Z-gradient (with depth compensation)...")
-    edge_voxels = compute_z_gradient(voxel_grid, compensation_power=1.0, base_threshold=16000)
+    edge_voxels = compute_z_gradient(voxel_grid,
+                                     compensation_power=defined_compensation_power,
+                                     base_threshold=defined_base_threshold)
     print(f"Detected {len(edge_voxels)} potential root edges.")
 
     if len(edge_voxels) == 0:
         print("No edge voxels detected. Adjust gradient threshold or check data.")
-        return
 
     print("Clustering edge voxels with DBSCAN...")
-    clustered_coords, labels = cluster_voxels(edge_voxels, eps=4, min_samples=10)
+    clustered_coords, labels = cluster_voxels(edge_voxels,
+                                              eps=defined_eps,
+                                              min_samples=defined_min_samples)
     print(f"Clusters found: {len(set(labels)) - (1 if -1 in labels else 0)}")
 
     voxel_labels = create_labeled_voxel_grid(voxel_grid.shape, clustered_coords, labels)
