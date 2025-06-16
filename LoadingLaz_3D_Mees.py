@@ -4,6 +4,7 @@ import numpy as np
 import open3d as o3d
 import matplotlib.pyplot as plt
 
+
 def load_point_cloud(file_path):
     """Load point cloud data from a LAZ file using PDAL."""
     pipeline_json = {
@@ -22,9 +23,11 @@ def load_point_cloud(file_path):
     arrays = pipeline.arrays
     return arrays[0]
 
+
 def print_point_cloud_attributes(points):
     """Print attributes of the point cloud data."""
     print(points.dtype.names)
+
 
 def investigate_data(points):
     """Investigate and print various attributes of the point cloud data."""
@@ -43,6 +46,7 @@ def investigate_data(points):
         values = points[attr]
         print(f"{attr}: min={values.min()}, max={values.max()}, unique={np.unique(values)[:10]}")
 
+
 def plot_signal_intensity_vs_depth(points):
     """Plot signal intensity vs depth."""
     r = points['Red'].astype(np.float32) / 65535
@@ -57,6 +61,7 @@ def plot_signal_intensity_vs_depth(points):
     plt.show()
     print("This plot loads for a long time - Estimated time 5-10minutes")
 
+
 def plot_backscatter_intensity_distribution(points):
     """Plot distribution of backscatter intensity."""
     r = points['Red'].astype(np.float32) / 65535
@@ -66,6 +71,7 @@ def plot_backscatter_intensity_distribution(points):
     plt.xlabel("Grayscale Value")
     plt.ylabel("Number of Points")
     plt.show()
+
 
 def visualize_subsurface(points):
     """Visualize the subsurface using Open3D."""
@@ -84,17 +90,19 @@ def visualize_subsurface(points):
     pcd.colors = o3d.utility.Vector3dVector(rgb)
 
     o3d.visualization.draw_geometries([pcd], window_name="GPR RGB Visualization")
+
+
 def main():
-    #file_path = r"C:\Users\misko\Documents\Michal\Master\RS Integration\ACT_6\Data\WUR_ACT_PG_250515\WUR_ACT_PG_250515\LAZ_Euroradar\Bomen-1-6.laz"
     # filepath for the intersected location with valid data
     file_path = r"C:\Users\mees2\Downloads\Proefsleuf_1.las"
     points = load_point_cloud(file_path)
 
     print_point_cloud_attributes(points)
     investigate_data(points)
-    #plot_signal_intensity_vs_depth(points) #takes a long time to run
+    # plot_signal_intensity_vs_depth(points) #takes a long time to run
     plot_backscatter_intensity_distribution(points)
     visualize_subsurface(points)
+
 
 if __name__ == "__main__":
     main()
