@@ -8,6 +8,17 @@ from sklearn.neighbors import NearestNeighbors
 import pyvista as pv
 
 
+def plot_backscatter_intensity_distribution(points):
+    """Plot distribution of backscatter intensity."""
+    r = points['Red'].astype(np.float32) / 65535
+
+    plt.hist(r, bins=100, color='gray', edgecolor='black')
+    plt.title("Distribution of Backscatter Intensity")
+    plt.xlabel("Grayscale Value")
+    plt.ylabel("Number of Points")
+    plt.show()
+
+
 def load_point_cloud(file_path):
     """Load point cloud data from a LAZ file using PDAL."""
     pipeline_json = {
@@ -89,37 +100,19 @@ def visualize_parabolas(points):
     gray = (r + g + b)/3
     print(gray.min(), gray.max())
 
-    # Mask for certain signals (e.g., > 0.8)
-    mask_strong = (gray > 0.75) & (z < -0.01)
-    mask_weak = (gray < 0.75) & (z < -0.01)
-
-    print(np.shape(mask_strong))
-    xyz_strong = xyz[mask_strong]
-    xyz_weak = xyz[mask_weak]
-
-    # mask_strong = (r > 0)
-    # xyz_strong = xyz[mask_strong]
-
-    pcd_strong = o3d.geometry.PointCloud()
-    pcd_strong.points = o3d.utility.Vector3dVector(xyz_strong)
-    pcd_strong.paint_uniform_color([1.0, 0.0, 0.0])
-
-    pcd_weak = o3d.geometry.PointCloud()
-    pcd_weak.points = o3d.utility.Vector3dVector(xyz_weak)
-    pcd_weak.paint_uniform_color([0.0, 1.0, 0.0])
-
     # Overlay with full point cloud
     pcd_all = o3d.geometry.PointCloud()
     pcd_all.points = o3d.utility.Vector3dVector(xyz)
     pcd_all.colors = o3d.utility.Vector3dVector(rgb)
 
-    mask_1 = (gray > 0.2) & (gray <= 0.4) & (z < -0.2)
-    mask_2 = (gray > 0.6) & (gray <= 0.7) & (z < -0.2)
-    mask_3 = (gray > 0.7) & (gray <= 0.8) & (z < -0.2)
-    mask_4 = (gray > 0.8) & (gray <= 0.9) & (z < -0.2)
-    mask_5 = (gray > 0.9) & (z < -0.01)
+    mask_1 = (gray > 0.65) & (gray <= 0.7) & (z < -1.0)
+    mask_2 = (gray > 0.7) & (gray <= 0.75) & (z < -1.0)
+    mask_3 = (gray > 0.75) & (gray <= 0.8) & (z < -1.0)
+    mask_4 = (gray > 0.8) & (gray <= 0.85) & (z < -1.0)
+    mask_5 = (gray > 0.85) & (gray <= 0.9) & (z < -1.0)
 
-    # TODO fix gray values to pull apart signal and also choose better value for z values (should be higher/lower)
+    # TODO fix gray values to pull apart signal and also
+    #  choose better value for z values (should be higher/lower)
 
     print("mask_1 count:", np.sum(mask_1))
     print("mask_2 count:", np.sum(mask_2))
@@ -135,41 +128,47 @@ def visualize_parabolas(points):
 
     pcd_1 = o3d.geometry.PointCloud()
     pcd_1.points = o3d.utility.Vector3dVector(xyz_1)
-    pcd_1.paint_uniform_color([1.0, 0.5, 0.0])  # Orange
 
     pcd_2 = o3d.geometry.PointCloud()
     pcd_2.points = o3d.utility.Vector3dVector(xyz_2)
-    pcd_2.paint_uniform_color([1.0, 1.0, 0.0])  # Yellow
 
     pcd_3 = o3d.geometry.PointCloud()
     pcd_3.points = o3d.utility.Vector3dVector(xyz_3)
-    pcd_3.paint_uniform_color([0.0, 1.0, 1.0])  # Cyan
+
 
     pcd_4 = o3d.geometry.PointCloud()
     pcd_4.points = o3d.utility.Vector3dVector(xyz_4)
-    pcd_4.paint_uniform_color([0.5, 0.0, 1.0])  # Purple
 
     pcd_5 = o3d.geometry.PointCloud()
     pcd_5.points = o3d.utility.Vector3dVector(xyz_5)
-    pcd_5.paint_uniform_color([1.0, 0.0, 1.0])  # Magenta
+
+    pcd_1.paint_uniform_color([0.0, 1.0, 0.0])  # Green
+    pcd_2.paint_uniform_color([0.5, 1.0, 0.0])  # Yellow-Green
+    pcd_3.paint_uniform_color([1.0, 1.0, 0.0])  # Yellow
+    pcd_4.paint_uniform_color([1.0, 0.5, 0.0])  # Orange
+    pcd_5.paint_uniform_color([1.0, 0.0, 0.0])  # Red
 
     # o3d.visualization.draw_geometries([pcd_weak, pcd_strong])
-    o3d.visualization.draw_geometries([pcd_2, pcd_3, pcd_4])
+    o3d.visualization.draw_geometries([pcd_1, pcd_2, pcd_3, pcd_4, pcd_5])
 
+    # TODO @Michal Bartek MGI I was thinking, I would like to try to
+    #  denoise my results by removing points that have very little points around them
+    #  (this is like clustering i guess?)
 
 def main():
     # filepath for the valid data
     file_path = r"C:\Users\mees2\Downloads\P1_10mBuffer.las"
     # "C:\Users\mees2\Downloads\Proefsleuf_1.las"
     # C:\Users\mees2\Downloads\WUR_ACT_PG_250515\WUR_ACT_PG_250515\LAZ_Euroradar\Bomen-23-37.laz
+
+    # create points
     points = load_point_cloud(file_path)
+
+    # histogram
+    #plot_backscatter_intensity_distribution(points)
 
     print_point_cloud_attributes(points)
     visualize_parabolas(points)
-    #visualize_high_intensity(points)
-
 
 if __name__ == "__main__":
     main()
-
-# 23 - 37
