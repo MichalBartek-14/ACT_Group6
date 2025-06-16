@@ -155,6 +155,7 @@ def visualize_parabolas(points):
     #  denoise my results by removing points that have very little points around them
     #  (this is like clustering i guess?)
 
+
 def main():
     # filepath for the valid data
     file_path = r"C:\Users\mees2\Downloads\P1_10mBuffer.las"
