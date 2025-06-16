@@ -113,11 +113,13 @@ def visualize_parabolas(points):
     pcd_all.points = o3d.utility.Vector3dVector(xyz)
     pcd_all.colors = o3d.utility.Vector3dVector(rgb)
 
-    mask_1 = (gray > 0.2) & (gray <= 0.4) & (z < -0.01)
-    mask_2 = (gray > 0.4) & (gray <= 0.6) & (z < -0.01)
-    mask_3 = (gray > 0.6) & (gray <= 0.75) & (z < -0.01)
-    mask_4 = (gray > 0.75) & (gray <= 0.9) & (z < -0.01)
+    mask_1 = (gray > 0.2) & (gray <= 0.4) & (z < -0.2)
+    mask_2 = (gray > 0.6) & (gray <= 0.7) & (z < -0.2)
+    mask_3 = (gray > 0.7) & (gray <= 0.8) & (z < -0.2)
+    mask_4 = (gray > 0.8) & (gray <= 0.9) & (z < -0.2)
     mask_5 = (gray > 0.9) & (z < -0.01)
+
+    # TODO fix gray values to pull apart signal and also choose better value for z values (should be higher/lower)
 
     print("mask_1 count:", np.sum(mask_1))
     print("mask_2 count:", np.sum(mask_2))
@@ -152,7 +154,7 @@ def visualize_parabolas(points):
     pcd_5.paint_uniform_color([1.0, 0.0, 1.0])  # Magenta
 
     # o3d.visualization.draw_geometries([pcd_weak, pcd_strong])
-    o3d.visualization.draw_geometries([pcd_3, pcd_4, pcd_5])
+    o3d.visualization.draw_geometries([pcd_2, pcd_3, pcd_4])
 
 
 def main():
@@ -163,10 +165,11 @@ def main():
     points = load_point_cloud(file_path)
 
     print_point_cloud_attributes(points)
-    #visualize_parabolas(points)
-    visualize_high_intensity(points)
+    visualize_parabolas(points)
+    #visualize_high_intensity(points)
 
 
 if __name__ == "__main__":
     main()
+
 # 23 - 37
