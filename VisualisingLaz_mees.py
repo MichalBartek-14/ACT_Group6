@@ -43,6 +43,7 @@ def print_point_cloud_attributes(points):
     print(points.dtype.names)
 
 
+
 def visualize_high_intensity(points):
     """Visualize high intensity points in the point cloud."""
     # compress the z-scale
@@ -85,8 +86,9 @@ def visualize_parabolas(points):
 
     print("shape: ", np.shape(xyz))
 
-    z = (xyz[:, 2]) / 100
+    z = (xyz[:, 2]) / 1000
     xyz[:, 2] = z
+    print("zmin, zmax are: ", z.min(), z.max())
 
     r = (points['Red'].astype(np.float32) / 65535)                              # .astype(float)
     print(f"Red intensity range: min = {r.min():.4f}, max = {r.max():.4f}")
@@ -105,11 +107,11 @@ def visualize_parabolas(points):
     pcd_all.points = o3d.utility.Vector3dVector(xyz)
     pcd_all.colors = o3d.utility.Vector3dVector(rgb)
 
-    mask_1 = (gray > 0.65) & (gray <= 0.7) & (z < -1.0)
-    mask_2 = (gray > 0.7) & (gray <= 0.75) & (z < -1.0)
-    mask_3 = (gray > 0.75) & (gray <= 0.8) & (z < -1.0)
-    mask_4 = (gray > 0.8) & (gray <= 0.85) & (z < -1.0)
-    mask_5 = (gray > 0.85) & (gray <= 0.9) & (z < -1.0)
+    mask_1 = (gray > 0.8) & (gray <= 0.82) & (z < -0.00)
+    mask_2 = (gray > 0.82) & (gray <= 0.84) & (z < -0.00)
+    mask_3 = (gray > 0.84) & (gray <= 0.86) & (z < -0.00)
+    mask_4 = (gray > 0.86) & (gray <= 0.88) & (z < -0.00)
+    mask_5 = (gray > 0.8) & (gray <= 0.9) & (z < -0.00)
 
     # TODO fix gray values to pull apart signal and also
     #  choose better value for z values (should be higher/lower)
@@ -135,7 +137,6 @@ def visualize_parabolas(points):
     pcd_3 = o3d.geometry.PointCloud()
     pcd_3.points = o3d.utility.Vector3dVector(xyz_3)
 
-
     pcd_4 = o3d.geometry.PointCloud()
     pcd_4.points = o3d.utility.Vector3dVector(xyz_4)
 
@@ -148,8 +149,13 @@ def visualize_parabolas(points):
     pcd_4.paint_uniform_color([1.0, 0.5, 0.0])  # Orange
     pcd_5.paint_uniform_color([1.0, 0.0, 0.0])  # Red
 
+    # mask_all = (gray > 0.8) & (gray <= 0.9) & (z < -0.0)
+    # xyz_all = xyz[mask_all]
+    # pcd_all = o3d.geometry.PointCloud()
+    # pcd_all.points = o3d.utility.Vector3dVector(xyz_all)
+
     # o3d.visualization.draw_geometries([pcd_weak, pcd_strong])
-    o3d.visualization.draw_geometries([pcd_1, pcd_2, pcd_3, pcd_4, pcd_5])
+    o3d.visualization.draw_geometries([pcd_5])
 
     # TODO @Michal Bartek MGI I was thinking, I would like to try to
     #  denoise my results by removing points that have very little points around them
@@ -170,6 +176,7 @@ def main():
 
     print_point_cloud_attributes(points)
     visualize_parabolas(points)
+
 
 if __name__ == "__main__":
     main()
