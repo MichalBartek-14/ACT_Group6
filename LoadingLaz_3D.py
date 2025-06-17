@@ -85,8 +85,8 @@ def visualize_subsurface(points):
 
     o3d.visualization.draw_geometries([pcd], window_name="GPR RGB Visualization")
 def main():
-    #file_path = r"C:\Users\misko\Documents\Michal\Master\RS Integration\ACT_6\Data\WUR_ACT_PG_250515\WUR_ACT_PG_250515\LAZ_Euroradar\Bomen-1-6.laz"
-    # filepath for the intersected location with valid data
+    #file_path = r"C:\Users\misko\Documents\Michal\Master\RS Integration\ACT_6\Data\WUR_ACT_PG_250515\WUR_ACT_PG_250515\LAZ_Euroradar\Bomen-23-37.laz"
+#filepath for the intersected location with valid data
     file_path = r"C:\Users\misko\Documents\Michal\Master\RS Integration\ACT_6\Data\Proefsleuf_1.las"
     points = load_point_cloud(file_path)
 

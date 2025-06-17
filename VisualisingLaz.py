@@ -62,7 +62,7 @@ def visualize_dbscan_segmentation(points):
     r = points['Red'].astype(np.float32) / 65535
 
     # Thresholding for strong signals deeper than -50
-    mask_strong = (r > 0.99) & (points['Z'] < -0.1)
+    mask_strong = (r > 0.6) & (points['Z'] < -0.1)
     xyz_strong = xyz[mask_strong]
 
     # DBSCAN clustering to group reflectors
@@ -102,16 +102,15 @@ def identify_roots(points):
     o3d.visualization.draw_geometries([pcd_strong])
 
 def main():
-    #file_path = r"C:\Users\misko\Documents\Michal\Master\RS Integration\ACT_6\Data\WUR_ACT_PG_250515\WUR_ACT_PG_250515\LAZ_Euroradar\Bomen-1-6.laz"
+    file_path = r"C:\Users\misko\Documents\Michal\Master\RS Integration\ACT_6\Data\WUR_ACT_PG_250515\WUR_ACT_PG_250515\LAZ_Euroradar\Bomen-23-37.laz"
 
     #filepath for the intersected location with valid data
-    file_path = r"C:\Users\misko\Documents\Michal\Master\RS Integration\ACT_6\Data\Proefsleuf_1.las"
+    file_path = r"C:\Users\misko\Documents\Michal\Master\RS Integration\ACT_6\Data\Proefsleuf_4.las"
 
     #visualising the location of attempted root segmentation
     #file_path = r"C:\Users\misko\Documents\Michal\Master\RS Integration\ACT_6\Data\P1_voxel_rootsegmentation.las"
 
     points = load_point_cloud(file_path)
-
     print_point_cloud_attributes(points)
     visualize_high_intensity(points)
     #visualize_dbscan_segmentation(points)

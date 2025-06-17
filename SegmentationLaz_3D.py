@@ -70,15 +70,6 @@ def run_hdbscan(points_xyz, reflectivity, min_cluster_size, min_samples):
     labels = clusterer.fit_predict(scaled_features)
     return labels
 
-def visualize_clusters_2d(xyz, labels, title="Clustered Points (XY)"):
-    plt.figure(figsize=(10, 6))
-    scatter = plt.scatter(xyz[:, 0], xyz[:, 1], c=labels, cmap='Spectral', s=5)
-    plt.colorbar(scatter)
-    plt.title(title)
-    plt.xlabel("X")
-    plt.ylabel("Y")
-    plt.show()
-
 def visualize_clusters_3d(xyz, labels):
     pcd = o3d.geometry.PointCloud()
     pcd.points = o3d.utility.Vector3dVector(xyz)
@@ -113,17 +104,17 @@ def main():
     xyz[:, 2] /= 30.0
 
     # Downsample to speed up clustering
-    xyz_down = voxel_downsample(xyz, voxel_size=0.07)
+    xyz_down = voxel_downsample(xyz, voxel_size=0.03)
 
     # Match reflectivity length (approximate — better would be remapping)
     reflectivity_down = reflectivity[:len(xyz_down)]
 
-    min_cluster_size = 7
-    min_samples = 30 #higher = more clusters
+    min_cluster_size = 20
+    min_samples = 50 #higher = more clusters
 
 #run and visualise
     labels = run_hdbscan(xyz_down, reflectivity_down,min_cluster_size,min_samples)
-    #visualize_clusters_2d(xyz_down, labels)
+
     visualize_clusters_3d(xyz_down, labels)
 
 if __name__ == "__main__":
