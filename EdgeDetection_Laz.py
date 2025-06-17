@@ -54,6 +54,7 @@ def compute_z_gradient(voxel_grid, compensation_power, base_threshold):
     return np.argwhere(edges)
 
 def cluster_voxels(voxel_coords, eps, min_samples):
+    ### 2
     if len(voxel_coords) == 0:
         return np.array([]), np.array([])
 
@@ -71,24 +72,25 @@ def create_labeled_voxel_grid(shape, coords, labels):
     return label_grid
 
 def visualize_clusters(coords, labels, min_bound, voxel_size):
-    colors = plt.cm.jet((labels % 20) / 20)[:, :3]  # Colorize by label
+    colors = plt.cm.jet((labels % 20) / 20)[:, :3]
     points = coords * voxel_size + min_bound
-
+    points[:, 2] *= 0.03
     pcd = o3d.geometry.PointCloud()
     pcd.points = o3d.utility.Vector3dVector(points)
     pcd.colors = o3d.utility.Vector3dVector(colors)
     o3d.visualization.draw_geometries([pcd], window_name="Root Clusters")
 
 def main():
-    file_path = r"C:\Users\misko\Documents\Michal\Master\RS Integration\ACT_6\Data\Proefsleuf_1.las"
+    file_path = r"C:\Users\misko\Documents\Michal\Master\RS Integration\ACT_6\Data\Proefsleuf_4.las"
+    #file_path = r"C:\Users\misko\Documents\Michal\Master\RS Integration\ACT_6\Data\P1_1mBuffer.las"
     if not os.path.exists(file_path):
         raise FileNotFoundError("File not found.")
 
     """"the parameters to alter:"""
     defined_voxel_size = 0.02
     #-----------z-gradient values-------#
-    defined_compensation_power = 1.0
-    defined_base_threshold = 16000
+    defined_compensation_power = 1.05 #1.05 default
+    defined_base_threshold = 20000 #20k for TvG, 15k for Costakade
     #-----------clustering--------------#
     defined_eps = 4
     defined_min_samples = 10
