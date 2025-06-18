@@ -3,13 +3,12 @@ import json
 import numpy as np
 import open3d as o3d
 import matplotlib.pyplot as plt
-from sklearn.cluster import DBSCAN
-from sklearn.neighbors import NearestNeighbors
-import pyvista as pv
 
 
 def plot_backscatter_intensity_distribution(points):
-    """Plot distribution of backscatter intensity."""
+    """Plot distribution of backscatter intensity.
+    @param points: expects pointcloud file created using PDAL
+    """
     r = points['Red'].astype(np.float32) / 65535
 
     plt.hist(r, bins=100, color='gray', edgecolor='black')
@@ -20,16 +19,11 @@ def plot_backscatter_intensity_distribution(points):
 
 
 def load_point_cloud(file_path):
-    """Load point cloud data from a LAZ file using PDAL."""
-    pipeline_json = {
-        "pipeline": [
-            file_path,
-            {
-                "type": "filters.range",
-                "limits": "Z[-1000:1000]"
-            }
-        ]
-    }
+    """Load point cloud data from a LAZ file using PDAL.
+    @param file_path: expects local absolute file path to LAZ file
+    @return: numpy ndarray (array for multidimensional data)
+    """
+    pipeline_json = {"pipeline": [file_path, {"type": "filters.range", "limits": "Z[-1000:1000]"}]}
 
     pipeline = pdal.Pipeline(json.dumps(pipeline_json))
     pipeline.execute()
@@ -38,41 +32,44 @@ def load_point_cloud(file_path):
     return arrays[0]
 
 
-def print_point_cloud_attributes(points):
-    """Print attributes of the point cloud data."""
-    print(points.dtype.names)
-
-
-
-def visualize_high_intensity(points):
-    """Visualize high intensity points in the point cloud."""
+def visualize_high_intensity(points, z_scale_compression: int = 50):
+    """Visualize  points in the point cloud of specific intensities. The points are filtered by using multiple masks.
+    The aim is to create the best visualisation of points that belong to roots.
+    The masks are actually lists that contain true/false data for every point in the cloud, which
+    can be used to only load the points with specific intensity values and z-values.
+    The selections of points are then colored.
+    @param z_scale_compression: integer that determines space between points along z-axis.
+    Tweakable for visualization purposes only
+    @param points: expects pointcloud file created using PDAL
+    """
     # compress the z-scale
     xyz = np.vstack((points['X'], points['Y'], points['Z'])).T
-    #z = xyz[:, 2]
-    # 10 default
-    z = (xyz[:, 2])/50
+    z = (xyz[:, 2])/z_scale_compression
     xyz[:, 2] = z
 
+    # change value range of color values to 0-1
     r = points['Red'].astype(np.float32) / 65535
     g = points['Green'].astype(np.float32) / 65535
     b = points['Blue'].astype(np.float32) / 65535
+
     rgb = np.vstack((r, g, b)).T
     gray = r.astype(float)
 
-    # Mask for strong signals (e.g., > 0.8) deep
-    mask_strong = (gray > 0.8) & (z < -0.01)
-    xyz_strong = xyz[mask_strong]
+    # Mask for strong signals (e.g., gray > 0.8) at time/depth (z < -0.01)
+    mask_high = (gray > 0.8) & (z < -0.01)
+    xyz_high = xyz[mask_high]
 
-    pcd_strong = o3d.geometry.PointCloud()
-    pcd_strong.points = o3d.utility.Vector3dVector(xyz_strong)
-    pcd_strong.paint_uniform_color([1.0, 0.0, 0.0])
+    pcd_high = o3d.geometry.PointCloud()
+    pcd_high.points = o3d.utility.Vector3dVector(xyz_high)
+    pcd_high.paint_uniform_color([1.0, 0.0, 0.0])   # red
 
     # Overlay with full point cloud
     pcd_all = o3d.geometry.PointCloud()
     pcd_all.points = o3d.utility.Vector3dVector(xyz)
     pcd_all.colors = o3d.utility.Vector3dVector(rgb)
 
-    o3d.visualization.draw_geometries([pcd_all, pcd_strong])
+    # this next line sometimes gives an error about "expected types", but this is no problem
+    o3d.visualization.draw_geometries([pcd_all, pcd_high])
 
 
 def visualize_parabolas(points):
@@ -90,12 +87,9 @@ def visualize_parabolas(points):
     xyz[:, 2] = z
     print("zmin, zmax are: ", z.min(), z.max())
 
-    r = (points['Red'].astype(np.float32) / 65535)                              # .astype(float)
-    print(f"Red intensity range: min = {r.min():.4f}, max = {r.max():.4f}")
-    g = (points['Green'].astype(np.float32) / 65535)                            # .astype(float)
-    print(f"Green intensity range: min = {g.min():.4f}, max = {g.max():.4f}")
-    b = (points['Blue'].astype(np.float32) / 65535)                             # .astype(float)
-    print(f"Blue intensity range: min = {b.min():.4f}, max = {b.max():.4f}")
+    r = (points['Red'].astype(np.float32) / 65535)
+    g = (points['Green'].astype(np.float32) / 65535)
+    b = (points['Blue'].astype(np.float32) / 65535)
 
     rgb = np.vstack((r, g, b)).T
 
@@ -163,18 +157,18 @@ def visualize_parabolas(points):
 
 
 def main():
-    # filepath for the valid data
+
     file_path = r"C:\Users\mees2\Downloads\P1_10mBuffer.las"
     # "C:\Users\mees2\Downloads\Proefsleuf_1.las"
-    # C:\Users\mees2\Downloads\WUR_ACT_PG_250515\WUR_ACT_PG_250515\LAZ_Euroradar\Bomen-23-37.laz
+    # "C:\Users\mees2\Downloads\WUR_ACT_PG_250515\WUR_ACT_PG_250515\LAZ_Euroradar\Bomen-23-37.laz
 
     # create points
     points = load_point_cloud(file_path)
+    print(type(points))
 
     # histogram
-    #plot_backscatter_intensity_distribution(points)
+    plot_backscatter_intensity_distribution(points)
 
-    print_point_cloud_attributes(points)
     visualize_parabolas(points)
 
 

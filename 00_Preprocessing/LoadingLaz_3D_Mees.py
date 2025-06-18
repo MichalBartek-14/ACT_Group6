@@ -30,7 +30,8 @@ def print_point_cloud_attributes(points):
 
 
 def investigate_data(points):
-    """Investigate and print various attributes of the point cloud data."""
+    """Investigate and print various attributes of the point cloud data.
+    @param points: """
     x, y, z = points['X'], points['Y'], points['Z']
     intensity = points['Intensity']
     return_number = points['ReturnNumber']
