@@ -72,8 +72,8 @@ def visualize_high_intensity(points, z_scale_compression: int = 50):
     o3d.visualization.draw_geometries([pcd_all, pcd_high])
 
 
-def visualize_parabolas(points):
-    """ Visualize high intensity points in the point cloud. """
+def roots_value_filter(points):
+    """ Visualize points in the point cloud of certain depth and intensity. """
     # compress the z-scale
     xyz = np.vstack((points['X'], points['Y'], points['Z'])).T
     print(f"xyz min/max: \n"
@@ -101,14 +101,11 @@ def visualize_parabolas(points):
     pcd_all.points = o3d.utility.Vector3dVector(xyz)
     pcd_all.colors = o3d.utility.Vector3dVector(rgb)
 
-    mask_1 = (gray > 0.8) & (gray <= 0.82) & (z < -0.00)
-    mask_2 = (gray > 0.82) & (gray <= 0.84) & (z < -0.00)
-    mask_3 = (gray > 0.84) & (gray <= 0.86) & (z < -0.00)
-    mask_4 = (gray > 0.86) & (gray <= 0.88) & (z < -0.00)
-    mask_5 = (gray > 0.8) & (gray <= 0.9) & (z < -0.00)
-
-    # TODO fix gray values to pull apart signal and also
-    #  choose better value for z values (should be higher/lower)
+    mask_1 = (gray > 0.8) & (gray <= 0.82) & (z < -1.00)
+    mask_2 = (gray > 0.82) & (gray <= 0.84) & (z < -1.00)
+    mask_3 = (gray > 0.84) & (gray <= 0.86) & (z < -1.00)
+    mask_4 = (gray > 0.86) & (gray <= 0.88) & (z < -1.00)
+    mask_5 = (gray > 0.8) & (gray <= 0.9) & (z < -1.00)
 
     print("mask_1 count:", np.sum(mask_1))
     print("mask_2 count:", np.sum(mask_2))
@@ -151,10 +148,6 @@ def visualize_parabolas(points):
     # o3d.visualization.draw_geometries([pcd_weak, pcd_strong])
     o3d.visualization.draw_geometries([pcd_5])
 
-    # TODO @Michal Bartek MGI I was thinking, I would like to try to
-    #  denoise my results by removing points that have very little points around them
-    #  (this is like clustering i guess?)
-
 
 def main():
 
@@ -164,12 +157,12 @@ def main():
 
     # create points
     points = load_point_cloud(file_path)
-    print(type(points))
-
+    # visualize highe intensity values
+    # visualize_high_intensity(points)
     # histogram
-    plot_backscatter_intensity_distribution(points)
+    # plot_backscatter_intensity_distribution(points)
 
-    visualize_parabolas(points)
+    roots_value_filter(points)
 
 
 if __name__ == "__main__":
