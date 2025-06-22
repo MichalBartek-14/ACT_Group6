@@ -4,16 +4,33 @@ from laspy import read
 from scipy.ndimage import sobel
 import os
 
-# ======================
-# 1. Load & Voxelize
-# ======================
 def load_las_point_cloud(file_path):
+    """
+    Loads the las files using laspy library
+    :param file_path: Path to the las file to read
+    :return: xyz coordinates of the pixels from the pointcloud and the reflectivity
+    """
     las = read(file_path)
     points = np.vstack((las.x, las.y, las.z)).T
+    # Reflectivity is normalised
     reflectivity = las.red / np.max(las.red)
     return points, reflectivity
 
 def voxelize_reflectivity(points, reflectivity, voxel_size):
+    """
+        This function voxelizes the reflectivity. This is done in order to:
+         a) smoothen the computation process
+         b) deal with the noisy GPR data.
+         Function creates the voxels which are later used for detection of root-like structures in gpr data.
+        :param points: the float array of the xyz coordinates for each point of the point cloud
+        :param reflectivity: the reflection parameter retrieved from the data for each point
+        :param voxel_size: define a voxel size for which the values will be interpolated
+        (0.02, 0.03 are usually best options for the size of the validation trench)
+        :return:
+        - min_bound = the min extent of the data
+        - voxel_grid = the averrgae wvalue of reflectivity of each of the voxels from the GPR point cloud
+        - voxel_size = returns the voxel size for more efficient calling of the function
+        """
     min_bound = points.min(axis=0)
     max_bound = points.max(axis=0)
     dims = np.ceil((max_bound - min_bound) / voxel_size).astype(int)
@@ -35,20 +52,26 @@ def voxelize_reflectivity(points, reflectivity, voxel_size):
         voxel_grid = np.divide(voxel_grid, count_grid, where=count_grid != 0)
     return voxel_grid, min_bound, voxel_size
 
-# ======================
-# 2. Slice & Detect
-# ======================
-### old v2
 def detect_roots_by_vertical_slicing(voxel_grid, gradient_threshold):
+    """
+    Function applies the Sobel (from scipy) operator to detect edges in vertical slices
+    of the voxel grid (both YZ and XZ planes). The edges are identified
+    based on a gradient threshold. Voxels with gradients above this threshold
+    are considered potential root locations.
+    :param voxel_grid: values of voxels to be processed
+    :param gradient_threshold: threshold from which the voxel is identified as a root
+    :return: array of the voxels considered as roots
+    """
     filled = np.nan_to_num(voxel_grid, nan=0.0)
     root_voxels = []
 
     # --- YZ slicing (fixed X) ---
     for x in range(filled.shape[0]):
-        yz_slice = filled[x, :, :]  # shape: (Y, Z)
+        yz_slice = filled[x, :, :] # Y,Z Plane
 
         grad_y = sobel(yz_slice, axis=0)
         grad_z = sobel(yz_slice, axis=1)
+        #
         magnitude = np.hypot(grad_y, grad_z)
 
         edges = magnitude > gradient_threshold * np.max(magnitude)
@@ -60,7 +83,7 @@ def detect_roots_by_vertical_slicing(voxel_grid, gradient_threshold):
 
     # --- XZ slicing (fixed Y) ---
     for y in range(filled.shape[1]):
-        xz_slice = filled[:, y, :]  # shape: (X, Z)
+        xz_slice = filled[:, y, :]  # X, Z plane
 
         grad_x = sobel(xz_slice, axis=0)
         grad_z = sobel(xz_slice, axis=1)
@@ -75,16 +98,21 @@ def detect_roots_by_vertical_slicing(voxel_grid, gradient_threshold):
 
     return np.array(root_voxels)
 
-# ======================
-# 3. Visualize
-# ======================
 def visualize_voxels(voxel_coords, min_bound, voxel_size):
+    """
+    Function visualises the detected roots. Converts the voxel coordinates
+    back to their original scale and creates a point cloud using Open3D.
+    :param voxel_coords: the coordinates of the voxels
+    :param min_bound: the minimum bounds of the area
+    :param voxel_size: the size of voxels, which is visualised
+    :return: visualisation of the voxels detected by this method.
+    """
     if len(voxel_coords) == 0:
         print("No root voxels found.")
         return
 
     points = voxel_coords * voxel_size + min_bound
-    points[:, 2] *= 0.03  # optional exaggeration of height
+    points[:, 2] *= 0.03  # optional visualisation of z-axis into more realistic point cloud
 
     pcd = o3d.geometry.PointCloud()
     pcd.points = o3d.utility.Vector3dVector(points)
@@ -94,9 +122,6 @@ def visualize_voxels(voxel_coords, min_bound, voxel_size):
 
     o3d.visualization.draw_geometries([pcd], window_name="Vertical Slice Root Detection")
 
-# ======================
-# 4. Run
-# ======================
 def main():
     file_path = r"C:\Users\misko\Documents\Michal\Master\RS Integration\ACT_6\Data\Proefsleuf_1.las"
     if not os.path.exists(file_path):
