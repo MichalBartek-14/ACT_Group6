@@ -8,7 +8,8 @@ import matplotlib.pyplot as plt
 
 def load_las_point_cloud(file_path):
     """
-    this function returns the individual points and its reflectivity from a point cloud dataset.
+    this function uses laspy to load the point cloud of GPR. It returns
+    the individual points and its reflectivity from a point cloud dataset.
     :param file_path: expects a path to point cloud data in .LAZ format
     :return: points (coordinates) and their reflectivity values
     """
@@ -16,6 +17,7 @@ def load_las_point_cloud(file_path):
     points = np.vstack((las.x, las.y, las.z)).T
 
     # The reflectivity is stored in rgb values where r=b=g. Here we extract r as reflectivity
+    # and the reflectivity is normalised
     reflectivity = las.red / np.max(las.red)
     return points, reflectivity
 
