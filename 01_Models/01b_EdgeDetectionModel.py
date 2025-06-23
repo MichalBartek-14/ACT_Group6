@@ -121,7 +121,7 @@ def visualize_clusters(coords, labels, min_bound, voxel_size):
     :param voxel_size: predefined voxel size
     :return: o3d visualisation of clusters
     """
-    #coloring options (copper, jet, Reds, gray)
+    # recommended coloring options (copper, jet, Reds, gray)
     # %int modulo operand can be changed for visualisations with fewer colors.
     colors = plt.cm.copper((labels % 20) / 20)[:, :3]
     points = coords * voxel_size + min_bound
