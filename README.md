@@ -1,3 +1,9 @@
+TODO:
+1. should include some nice pictures
+2. should add citations to papers
+3. should update the file structure (the names are a bit wrong)
+4. add license
+
 # Introduction
 this project is an analysis of GPR (ground penetrating radar) data. 
 The goal is to retrieve specific signals that belong to tree roots 
@@ -57,9 +63,3 @@ explain why it didn't work and that this is a fundamental flaw with R code
 
 # License
 
-
-
-   1. explain how code should be run!
-   2. explain what every file does
-   3. mention names of people that worked on this code (mees michal eleanor and Dimitra)
-   4. License
