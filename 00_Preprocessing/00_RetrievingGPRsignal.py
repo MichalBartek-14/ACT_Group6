@@ -3,6 +3,7 @@ import json
 import subprocess
 import os
 
+
 def process_lidar_data(input_laz, gpkg, output_las, target_crs="EPSG:28992"):
     """
     Processes LiDAR data by cropping it to a specified polygon and saving the output.
