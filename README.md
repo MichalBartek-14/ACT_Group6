@@ -4,8 +4,8 @@ TODO:
 3. should update the file structure (the names are a bit wrong)
 4. add license
 
-# Introduction
-this project is an analysis of GPR (ground penetrating radar) data. 
+# Analyzing GPR and photogrammetry data in Python and R
+this project is an analysis of GPR (ground penetrating radar) data and photogrammetry data. 
 The goal is to retrieve specific signals that belong to tree roots 
 underground. The data was received in LAZ and PLY formats. In an 
 ideal situation, the code below would generate a 3D model of tree roots that is georeferenced, 
