@@ -36,10 +36,10 @@ was only able to take away those signals that are very different from roots. It 
 but wasn't able to filter out points with a high enough accuracy. There were always points present 
 that couldn't have belonged to roots.
 ### 01b_EdgeDetectionModel.py
-... Hello meees whatsup, slovensko moje
+...
 cite papers
 ### 01c_Slices_Approach.py
-hello mees here
+...
 cite papers
 ## R compatibility
 ...
