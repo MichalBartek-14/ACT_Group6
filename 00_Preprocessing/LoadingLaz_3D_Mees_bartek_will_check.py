@@ -74,25 +74,6 @@ def plot_backscatter_intensity_distribution(points):
     plt.show()
 
 
-def visualize_subsurface(points):
-    """Visualize the subsurface using Open3D."""
-    xyz = np.vstack((points['X'], points['Y'], points['Z'])).T
-
-    # Convert raw RGB to 0-1 float values
-    r = points['Red'].astype(np.float32) / 65535
-    g = points['Green'].astype(np.float32) / 65535
-    b = points['Blue'].astype(np.float32) / 65535
-
-    rgb = np.vstack((r, g, b)).T
-
-    # Create point cloud and assign color
-    pcd = o3d.geometry.PointCloud()
-    pcd.points = o3d.utility.Vector3dVector(xyz)
-    pcd.colors = o3d.utility.Vector3dVector(rgb)
-
-    o3d.visualization.draw_geometries([pcd], window_name="GPR RGB Visualization")
-
-
 def main():
     # filepath for the intersected location with valid data
     file_path = r"C:\Users\mees2\Downloads\Proefsleuf_1.las"
@@ -102,7 +83,6 @@ def main():
     investigate_data(points)
     # plot_signal_intensity_vs_depth(points) #takes a long time to run
     plot_backscatter_intensity_distribution(points)
-    visualize_subsurface(points)
 
 
 if __name__ == "__main__":
