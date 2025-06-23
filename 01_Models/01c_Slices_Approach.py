@@ -61,6 +61,8 @@ def detect_roots_by_vertical_slicing(voxel_grid, gradient_threshold):
     of the voxel grid (both YZ and XZ planes). The edges are identified
     based on a gradient threshold. Voxels with gradients above this threshold
     are considered potential root locations.
+    note: No clustering has been applied to this method - therefore the functuion only returns
+    the voxels that are potential roots
     :param voxel_grid: values of voxels to be processed
     :param gradient_threshold: threshold from which the voxel is identified as a root
     :return: array of the voxels considered as roots
@@ -120,7 +122,6 @@ def visualize_voxels(voxel_coords, min_bound, voxel_size):
     pcd = o3d.geometry.PointCloud()
     pcd.points = o3d.utility.Vector3dVector(points)
 
-    #colors = plt.cm.copper(np.linspace(0, 1, len(points)))
     colors = np.array([[0.6, 0.3, 0.1] for _ in range(len(points))])
     pcd.colors = o3d.utility.Vector3dVector(colors)
 
