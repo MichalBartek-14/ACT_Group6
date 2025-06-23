@@ -8,18 +8,18 @@ TODO:
 this project is an analysis of GPR (ground penetrating radar) data and photogrammetry data. 
 The goal is to retrieve specific signals that belong to tree roots 
 underground. The data was received in LAZ and PLY formats. In an 
-ideal situation, the code below would generate a 3D model of tree roots that is georeferenced, 
-with no signals of other clutter (pipes, watertanks, watertables, rocks etc.) that was picked up on by the GPR in the ground.
+ideal situation, the code would generate a 3D visualisation of tree roots on a desired location that is georeferenced, 
+with preferably no signals of other clutter (pipes, watertanks, watertables, rocks etc.) that was picked up on by the GPR in the ground.
 However, situations are rarely ideal and therefore the following code is more or less a collection of
 attempts at achieving this 3D model instead of a solution. The attempts are listed in the 01_models folder. 
 It will be explained in further detail that some of the methods used are similar to
 literature, which will be cited. 
 ## Preprocessing
-Preprocessing is mainly about changing the format of the data in a 
+Preprocessing encorporates the conversion of the GPR signal from the large original location to the desired section for which the analysis is conducted later. The file is assigned the coordinate system. Preprocessing is mainly about changing the format of the data in a 
 way that it can be easily visualized. _00_RetrievingGPRsignal.py_ attempts 
-to convert LAZ to LAS and add a georeference to it. _00_VisualisingLAZ.py_
+to convert LAZ file of the larger area to LAS of the desired validation trench location and add a georeference to it. _00_VisualisingLAZ.py_
 explores how to best visualize a LAZ file. _00_VisualisingMesh.py_ experiments 
-with two ways of visualising a mesh file created through photogrammetry. 
+with two ways of visualising a mesh validation trench file created through photogrammetry. 
 ## Models
 The following three models are three attempts at retrieving/isolating tree root signals.
 ### 01a_ValueFiltering.py
@@ -36,11 +36,30 @@ was only able to take away those signals that are very different from roots. It 
 but wasn't able to filter out points with a high enough accuracy. There were always points present 
 that couldn't have belonged to roots.
 ### 01b_EdgeDetectionModel.py
-... 
-cite papers
+
+This method attempts to detect the tree roots by identifying root edges which would be seen in the reflectivity signal between two volumes (soil and tree root). 
+
+First the values of the point cloud are loaded and then voxelised. Voxelisation is used for 2 main reasons: 
+
+A) **Deal with the noise** which is present heavily in the GPR signal. Since our dataset is a GPR data converted into a lidar-like point cloud, it includes only the reflectivity of the individual pixels stored in rgb variable. Since the noise causes rapid unexplainable changes in the signal it is vital to smooth out these difference to detect actual object in ground. Therefore the voxelisation is applied and the voxel processed values simulate the reality better after voxelisation.
+
+B) **Computationally more efficient** to make analyses on the voxels. Since the voxels aggregate the data into fewer entities with the original information included, it makes the calculations much faster.
+This is especially efficient when processing larger files.
+
+After the voxelisation the z-gradient is computed (with manual difference convolution kernel) to detect sharp edges between the voxels that would indicate the change in signal (potential shift of signal in other volume than soil).
+Since the signal decreases with the depth of the soil due to attenuation, we apply compensation for the depth of the signal.
+
+Once the voxels with sharp contrast are identified as potential root objects, the clustering from **DBSCAN** method is applied to detect the 
+clusters. Since one root ideally shows similar values of the change (from soil to root) along its length the clustering should pick up its shape also laterally.
+DBSCAN clustering (with fine tuned parameters) should thus potentially separate independent root instances.
+
 ### 01c_Slices_Approach.py
-...
-cite papers
+
+Approach 01C similarly to 01B uses voxels as method to deal with the noise and make the computation process more efficient.
+After the voxels are computed the z-gradient is computed, however contrary to the 01B, the z-gradient is not manually computed with the convolution kernel , but
+with **Sobel** operator that is run on the XZ, YZ slices of the data retrieved from the point cloud.
+This method also considers the magnitude of the z-gradient and Sobel computes gradients along both axes since it works from 2D slices.
+
 ## R compatibility
 ...
 explain why it didn't work and that this is a fundamental flaw with R code
