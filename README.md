@@ -99,6 +99,8 @@ The same goes for the R code, but this code was parted with much faster because 
 the problem with memory allocation, which is a core problem of the R coding language. The code was still included, to 
 serve as an example that R is not the way to go for this kind of problem.
 
-Credits go out to [@MichalBartek-14](https://github.com/MichalBartek-14) and [@M-Ike007](https://github.com/M-Ike007) for the Python code and to Eleanor Hammond and [@Dimitra-tzedaki](https://github.com/Dimitra-tzedaki) for the R code.
+Credits go out to [Michal Bartek](https://github.com/MichalBartek-14) and [Mees Ike](https://github.com/M-Ike007) 
+for the Python code and to [Eleanor Hammond](https://github.com/Eh6708) and [Dimitra tzedaki](https://github.com/Dimitra-tzedaki) 
+for the R code.
 # License
 
