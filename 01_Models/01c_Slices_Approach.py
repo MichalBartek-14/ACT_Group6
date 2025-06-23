@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider
 from scipy.ndimage import gaussian_filter
 
+
 def load_las_point_cloud(file_path):
     """
     Loads the las files using laspy library
@@ -18,6 +19,7 @@ def load_las_point_cloud(file_path):
     # Reflectivity is normalised
     reflectivity = las.red / np.max(las.red)
     return points, reflectivity
+
 
 def voxelize_reflectivity(points, reflectivity, voxel_size):
     """
@@ -54,6 +56,7 @@ def voxelize_reflectivity(points, reflectivity, voxel_size):
     with np.errstate(invalid='ignore'):
         voxel_grid = np.divide(voxel_grid, count_grid, where=count_grid != 0)
     return voxel_grid, min_bound, voxel_size
+
 
 def detect_roots_by_vertical_slicing(voxel_grid, gradient_threshold):
     """
@@ -103,6 +106,7 @@ def detect_roots_by_vertical_slicing(voxel_grid, gradient_threshold):
 
     return np.array(root_voxels)
 
+
 def visualize_voxels(voxel_coords, min_bound, voxel_size):
     """
     Function visualises the detected roots. Converts the voxel coordinates
@@ -128,6 +132,8 @@ def visualize_voxels(voxel_coords, min_bound, voxel_size):
     o3d.visualization.draw_geometries([pcd], window_name="Vertical Slice Root Detection")
 
 #--- Visualising slices ---#
+
+
 def interpolate_raster(slice_data, method='gaussian'):
     """
     Interpolates a 2D slice to fill gaps between the layers.
@@ -200,6 +206,7 @@ def browse_yz_slices(voxel_grid):
     slider.on_changed(update)
     plt.show()
 
+
 def browse_xz_slices(voxel_grid):
     """
     Slicing function for the XZ slicing along Y
@@ -253,6 +260,7 @@ def browse_xz_slices(voxel_grid):
     slider.on_changed(update)
     plt.show()
 
+
 def main():
     file_path = r"C:\Users\misko\Documents\Michal\Master\RS Integration\ACT_6\Data\Proefsleuf_1.las"
     if not os.path.exists(file_path):
@@ -275,6 +283,7 @@ def main():
     print("Browsing slices...")
     browse_yz_slices(voxel_grid)
     browse_xz_slices(voxel_grid)
+
 
 if __name__ == "__main__":
     main()
