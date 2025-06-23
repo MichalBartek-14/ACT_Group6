@@ -5,6 +5,7 @@ import open3d as o3d
 import matplotlib.pyplot as plt
 from sklearn.cluster import DBSCAN
 
+
 def load_point_cloud(file_path):
     """Load point cloud data from a LAZ file using PDAL."""
     pipeline_json = {
@@ -23,9 +24,11 @@ def load_point_cloud(file_path):
     arrays = pipeline.arrays
     return arrays[0]
 
+
 def print_point_cloud_attributes(points):
     """Print attributes of the point cloud data."""
     print(points.dtype.names)
+
 
 def visualize_high_intensity(points):
     """Visualize high intensity points in the point cloud."""
@@ -56,6 +59,8 @@ def visualize_high_intensity(points):
     pcd_all.colors = o3d.utility.Vector3dVector(rgb)
 
     o3d.visualization.draw_geometries([pcd_all, pcd_strong])
+
+
 def visualize_dbscan_segmentation(points):
     """Visualize DBSCAN segmentation of high intensity points."""
     xyz = np.vstack((points['X'], points['Y'], points['Z']/10)).T
@@ -82,6 +87,7 @@ def visualize_dbscan_segmentation(points):
     print(f"Clusters found (excluding noise): {n_clusters}")
     o3d.visualization.draw_geometries([pcd_clustered], window_name="DBSCAN Segmentation Visualization")
 
+
 def identify_roots(points):
     """Visualize only high intensity points in the point cloud."""
     xyz = np.vstack((points['X'], points['Y'], points['Z'])).T
@@ -101,6 +107,7 @@ def identify_roots(points):
 
     o3d.visualization.draw_geometries([pcd_strong])
 
+
 def main():
     file_path = r"C:\Users\misko\Documents\Michal\Master\RS Integration\ACT_6\Data\WUR_ACT_PG_250515\WUR_ACT_PG_250515\LAZ_Euroradar\Bomen-23-37.laz"
 
@@ -115,5 +122,7 @@ def main():
     visualize_high_intensity(points)
     #visualize_dbscan_segmentation(points)
     #identify_roots(points)
+
+
 if __name__ == "__main__":
     main()
