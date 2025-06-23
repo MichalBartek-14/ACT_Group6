@@ -58,8 +58,47 @@ explain why it didn't work and that this is a fundamental flaw with R code
 └── R_compatibility  
 ```
 # how to use
+Most python files in this directory are structured in the following way:
+```
+import x
+import y
+import z
 
-# Credits
 
+def function_a():
+    ...
+
+
+def function_b():
+    ...
+
+
+def main():
+    function_a()
+    function_b()
+    
+    
+if __name__ == "__main__":
+    main()
+
+```
+It is possible to run different functions in the main function to figure 
+out what each function does. Very rarely do functions depend on each other. 
+In most cases they are standalone. Some functions are quite long and could 
+benefit from subfunctions, however in this way, the different methods 
+used are very clearly visible. 
+
+# Credits & AI Statement
+AI LLM's were used to generate quite a lot of Python code. This was deemed fitting because 
+there was too little time to find appropriate packages and study their functionalities 
+in an effective way to write our own code. However, Most time was spent on modifying the generated code to our data. 
+This entails changing filter values, tweaking clustering parameters and tinkering 
+with matplotlib visualisations of slices of the data. 
+
+The same goes for the R code, but this code was parted with much faster because of 
+the problem with memory allocation, which is a core problem of the R coding language. The code was still included, to 
+serve as an example that R is not the way to go for this kind of problem.
+
+Credits go out to @MichalBartek-14 and @M-Ike007 for the Python code and to Eleanor Hammond and @Dimitra-tzedaki for the R code.
 # License
 
