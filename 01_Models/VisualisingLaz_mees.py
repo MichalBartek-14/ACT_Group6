@@ -72,8 +72,16 @@ def visualize_high_intensity(points, z_scale_compression: int = 50):
     o3d.visualization.draw_geometries([pcd_all, pcd_high])
 
 
-def roots_value_filter(points):
-    """ Visualize points in the point cloud of certain depth and intensity. """
+def roots_value_filter(points, z_scale_compression: int = 50):
+    """ Visualize points in the point cloud of certain depth and intensity.
+    There are five masks created that attempt to filter out values that correspond to roots.
+    The method for this is visually trying to get the best results. The testsite for the current values are based on
+    the proefsleuf_1.laz file. Be aware that these values might not translate to other test sites because of
+    differences in soil composition and hence the strength of the returned signal for the roots.
+    @param z_scale_compression: integer that determines space between points along z-axis.
+    Tweakable for visualization purposes only
+    @param points: expects pointcloud file created using PDAL
+    """
     # compress the z-scale
     xyz = np.vstack((points['X'], points['Y'], points['Z'])).T
     print(f"xyz min/max: \n"
@@ -83,7 +91,7 @@ def roots_value_filter(points):
 
     print("shape: ", np.shape(xyz))
 
-    z = (xyz[:, 2]) / 1000
+    z = (xyz[:, 2]) / z_scale_compression
     xyz[:, 2] = z
     print("zmin, zmax are: ", z.min(), z.max())
 
@@ -101,11 +109,11 @@ def roots_value_filter(points):
     pcd_all.points = o3d.utility.Vector3dVector(xyz)
     pcd_all.colors = o3d.utility.Vector3dVector(rgb)
 
-    mask_1 = (gray > 0.8) & (gray <= 0.82) & (z < -1.00)
-    mask_2 = (gray > 0.82) & (gray <= 0.84) & (z < -1.00)
-    mask_3 = (gray > 0.84) & (gray <= 0.86) & (z < -1.00)
-    mask_4 = (gray > 0.86) & (gray <= 0.88) & (z < -1.00)
-    mask_5 = (gray > 0.8) & (gray <= 0.9) & (z < -1.00)
+    mask_1 = (gray > 0.8) & (gray <= 0.82) & (z < -0.00)
+    mask_2 = (gray > 0.82) & (gray <= 0.84) & (z < -0.00)
+    mask_3 = (gray > 0.84) & (gray <= 0.86) & (z < -0.00)
+    mask_4 = (gray > 0.86) & (gray <= 0.88) & (z < -0.00)
+    mask_5 = (gray > 0.8) & (gray <= 0.9) & (z < -0.00)
 
     print("mask_1 count:", np.sum(mask_1))
     print("mask_2 count:", np.sum(mask_2))
@@ -152,17 +160,14 @@ def roots_value_filter(points):
 def main():
 
     file_path = r"C:\Users\mees2\Downloads\P1_10mBuffer.las"
-    # "C:\Users\mees2\Downloads\Proefsleuf_1.las"
-    # "C:\Users\mees2\Downloads\WUR_ACT_PG_250515\WUR_ACT_PG_250515\LAZ_Euroradar\Bomen-23-37.laz
 
-    # create points
     points = load_point_cloud(file_path)
-    # visualize highe intensity values
+
     # visualize_high_intensity(points)
-    # histogram
+
     # plot_backscatter_intensity_distribution(points)
 
-    roots_value_filter(points)
+    # roots_value_filter(points)
 
 
 if __name__ == "__main__":
