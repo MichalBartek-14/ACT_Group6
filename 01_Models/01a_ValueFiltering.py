@@ -154,7 +154,7 @@ def roots_value_filter(points, z_scale_compression: int = 50):
     # pcd_all.points = o3d.utility.Vector3dVector(xyz_all)
 
     # o3d.visualization.draw_geometries([pcd_weak, pcd_strong])
-    o3d.visualization.draw_geometries([pcd_5])
+    o3d.visualization.draw_geometries([pcd_1, pcd_2, pcd_3, pcd_4, pcd_5])
 
 
 def main():
@@ -166,7 +166,7 @@ def main():
 
     # plot_backscatter_intensity_distribution(points)
 
-    # roots_value_filter(points)
+    roots_value_filter(points)
 
 
 if __name__ == "__main__":
