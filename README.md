@@ -1,28 +1,45 @@
+# Introduction
+....
+## Preprocessing
+Preprocessing is mainly about changing the format of the data in a 
+way that it can be easily visualized. _00_RetrievingGPRsignal.py_ attempts 
+to convert LAZ to LAS and add a georeference to it. _00_VisualisingLAZ.py_
+explores how to best visualize a LAZ file. _00_VisualisingMesh.py_ experiments 
+with two ways of visualising a mesh file created through photogrammetry. 
+## Models
+### 01a_ValueFiltering.py
+...
+cite papers
+### 01b_EdgeDetectionModel.py
+...
+cite papers
+### 01c_Slices_Approach.py
+...
+cite papers
+## R compatibility
+...
+explain why it didn't work and that this is a fundamental flaw with R code
 # Project Folder Structure
-
 ```
 📁 00 preprocessing  
 ├── retrieving_GPR  
-├── loading  
-
+├── visualizingLaz 
+├── VisualisingMesh
 📁 01 models  
-├── model_1  
-├── model_2
-├── model_3
-
+├── ValueFiltering  
+├── EdgeDetectionModel
+├── Slices_Approach
 📁 02 R compatibility  
 └── R_compatibility  
 ```
-# checklist for cleaning code:
-1. all variable names short and clear
-2. correct indenting, tabs and enters
-3. docstring present with params
-4. no errors when (ALL) code is being run
-5. remove unused imports
+# how to use
 
-Things to do at the end: 
-1. check for double used code. if double code, use imports instead!
-2. explain in readme:
+# Credits
+
+# License
+
+
+
    1. explain how code should be run!
    2. explain what every file does
    3. mention names of people that worked on this code (mees michal eleanor and Dimitra)
