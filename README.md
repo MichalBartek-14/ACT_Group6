@@ -35,7 +35,7 @@ based on specific values is impossible because there is a strong overlap in valu
 was only able to take away those signals that are very different from roots. It did improve the visualisation of roots,
 but wasn't able to filter out points with a high enough accuracy. There were always points present 
 that couldn't have belonged to roots.
-### 01b_EdgeDetectionModel.py
+### 01b_Kernel_and_DBSCAN.py
 
 This method attempts to detect the tree roots by identifying root edges which would be seen in the reflectivity signal between two volumes (soil and tree root). 
 
@@ -53,7 +53,7 @@ Once the voxels with sharp contrast are identified as potential root objects, th
 clusters. Since one root ideally shows similar values of the change (from soil to root) along its length the clustering should pick up its shape also laterally.
 DBSCAN clustering (with fine tuned parameters) should thus potentially separate independent root instances.
 
-### 01c_Slices_Approach.py
+### 01c_Slicing_Approach.py
 
 Approach 01C similarly to 01B uses voxels as method to deal with the noise and make the computation process more efficient.
 After the voxels are computed the z-gradient is computed, however contrary to the 01B, the z-gradient is not manually computed with the convolution kernel , but
@@ -61,8 +61,10 @@ with **Sobel** operator that is run on the XZ, YZ slices of the data retrieved f
 This method also considers the magnitude of the z-gradient and Sobel computes gradients along both axes since it works from 2D slices.
 
 ## R compatibility
-...
-explain why it didn't work and that this is a fundamental flaw with R code
+
+This file is an attempt at trying similar processing methods in R.
+Unfortunately, we ran into computation related problems. R has its own system for allocating memory. 
+02_R_Compatibility.R was run on a macbook with 16GB ram and a windows laptop with 16GB ram. For both cases, the systems crashed.
 # Project Folder Structure
 ```
 📁 00 preprocessing  

@@ -134,7 +134,7 @@ def visualize_clusters(coords, labels, min_bound, voxel_size):
 
 def main():
     # --- FILE PATH to desired LAS/LAZ file --- #
-    file_path = r"C:\Users\misko\Documents\Michal\Master\RS Integration\ACT_6\Data\Proefsleuf_4.las"
+    file_path = r"C:\Users\misko\Documents\Michal\Master\RS Integration\ACT_6\Data\Proefsleuf_1.las"
     if not os.path.exists(file_path):
         raise FileNotFoundError("File not found.")
 
@@ -143,7 +143,7 @@ def main():
     defined_voxel_size = 0.02
     #-----------   z-gradient values    -------#
     defined_compensation_power = 1.05 #1.05 default
-    defined_base_threshold = 20000 #20k for TvG, 15k for Costakade
+    defined_base_threshold = 15000 #20k for TvG, 15k for Costakade
     #-----------   clustering    --------------#
     defined_eps = 4 # increase
     defined_min_samples = 10

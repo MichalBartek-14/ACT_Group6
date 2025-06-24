@@ -121,7 +121,7 @@ def visualize_voxels(voxel_coords, min_bound, voxel_size):
         return
 
     points = voxel_coords * voxel_size + min_bound
-    points[:, 2] *= 0.03  # optional visualisation of z-axis into more realistic point cloud
+    points[:, 2] *= 0.01  # optional visualisation of z-axis into more realistic point cloud
 
     pcd = o3d.geometry.PointCloud()
     pcd.points = o3d.utility.Vector3dVector(points)
