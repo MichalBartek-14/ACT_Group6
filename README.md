@@ -63,11 +63,16 @@ This method also considers the magnitude of the z-gradient and Sobel computes gr
 
 ![Slice vis](https://github.com/MichalBartek-14/ACT_Group6/blob/master/pictures/01c_Slices.png)
 
+<div align="center">
+  <img src="https://github.com/MichalBartek-14/ACT_Group6/blob/master/pictures/01c_Slices.png?raw=true" alt="Slice vis" width="300">
+</div>
+
 ## R compatibility
 
 This file is an attempt at trying similar processing methods in R.
 Unfortunately, we ran into computation related problems. R has its own system for allocating memory. 
 02_R_Compatibility.R was run on a macbook with 16GB ram and a windows laptop with 16GB ram. For both cases, the systems crashed.
+
 # Project Folder Structure
 ```
 📁 00 preprocessing  
