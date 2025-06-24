@@ -31,7 +31,7 @@ def print_point_cloud_attributes(points):
 
 def investigate_data(points):
     """Investigate and print various attributes of the point cloud data.
-    @param points: """
+    @param points: The points data"""
     x, y, z = points['X'], points['Y'], points['Z']
     intensity = points['Intensity']
     return_number = points['ReturnNumber']
@@ -39,6 +39,7 @@ def investigate_data(points):
 
     print(f"Y range: {y.min()} to {y.max()}")
     print(f"X range: {x.min()} to {x.max()}")
+    print(f"Z range: {z.min()} to {z.max()}")
     print(f"Intensity: {intensity.min()} to {intensity.max()}")
     print(f"ReturnNumber: {return_number.min()} to {return_number.max()}")
     print(f"NumberOfReturns: {num_returns.min()} to {num_returns.max()}")
@@ -73,16 +74,50 @@ def plot_backscatter_intensity_distribution(points):
     plt.ylabel("Number of Points")
     plt.show()
 
+def visualize_high_intensity(points):
+    """Visualize high intensity points in the point cloud."""
 
+    xyz = np.vstack((points['X'], points['Y'], points['Z'])).T
+    # compress the z-scale
+    # 50 default
+    z = (xyz[:, 2])/50
+    xyz[:, 2] = z
+
+    r = points['Red'].astype(np.float32) / 65535
+    g = points['Green'].astype(np.float32) / 65535
+    b = points['Blue'].astype(np.float32) / 65535
+    rgb = np.vstack((r, g, b)).T
+    gray = r.astype(float)
+
+    # Mask for strong signals (e.g., > 0.8) deep
+    mask_strong = (gray > 0.8) & (z < -0.01)
+    xyz_strong = xyz[mask_strong]
+
+    pcd_strong = o3d.geometry.PointCloud()
+    pcd_strong.points = o3d.utility.Vector3dVector(xyz_strong)
+    pcd_strong.paint_uniform_color([1.0, 0.0, 0.0])
+
+    # Overlay with full point cloud
+    pcd_all = o3d.geometry.PointCloud()
+    pcd_all.points = o3d.utility.Vector3dVector(xyz)
+    pcd_all.colors = o3d.utility.Vector3dVector(rgb)
+
+    o3d.visualization.draw_geometries([pcd_all, pcd_strong])
 def main():
     # filepath for the intersected location with valid data
+    # define your file path to the .las file here
     file_path = r"C:\Users\mees2\Downloads\Proefsleuf_1.las"
+
     points = load_point_cloud(file_path)
 
     print_point_cloud_attributes(points)
     investigate_data(points)
-    # plot_signal_intensity_vs_depth(points) #takes a long time to run
+    # plot_signal_intensity_vs_depth(points) # --uncomment for this function to run -> takes a long time to run
+
+    #Visualise the backscatter and high values in .laz file
+
     plot_backscatter_intensity_distribution(points)
+    visualize_high_intensity(points)
 
 
 if __name__ == "__main__":
