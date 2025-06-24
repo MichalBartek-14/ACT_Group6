@@ -32,8 +32,6 @@ was only able to take away those signals that are very different from roots. It 
 but wasn't able to filter out points with a high enough accuracy. There were always points present 
 that couldn't have belonged to roots.
 
-![Mesh vis](https://github.com/MichalBartek-14/ACT_Group6/blob/master/pictures/01a_Value_Filtering.png)
-
 <div align="center">
   <img src="https://github.com/MichalBartek-14/ACT_Group6/blob/master/pictures/01a_Value_Filtering.png?raw=true" alt="Mesh vis" width="300">
 </div>
@@ -57,7 +55,7 @@ clusters. Since one root ideally shows similar values of the change (from soil t
 DBSCAN clustering (with fine tuned parameters) should thus potentially separate independent root instances.
 
 <div align="center">
-  <img src="https://https://github.com/MichalBartek-14/ACT_Group6/blob/master/pictures/01b_Edge.png?raw=true" alt="Edge vis" width="300">
+    <img src="https://github.com/MichalBartek-14/ACT_Group6/blob/master/pictures/01b_Edge.png?raw=true" alt="Edge vis" width="300">
 </div>
 
 ### 01c_Slicing_Approach.py
