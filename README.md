@@ -122,4 +122,4 @@ Credits go out to [Michal Bartek](https://github.com/MichalBartek-14) and [Mees 
 for the Python code and to [Eleanor Hammond](https://github.com/Eh6708) and [Dimitra tzedaki](https://github.com/Dimitra-tzedaki) 
 for the R code.
 # License
-
+This project falls under an MIT License 
