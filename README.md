@@ -78,13 +78,13 @@ Unfortunately, we ran into computation related problems. R has its own system fo
 # Project Folder Structure
 ```
 📁 00 preprocessing  
-├── retrieving_GPR  
-├── visualizingLaz 
+├── Retrieving_GPRsignal  
+├── Visualizing_LoadingLaz 
 ├── VisualisingMesh
 📁 01 models  
-├── ValueFiltering  
-├── EdgeDetectionModel
-├── Slices_Approach
+├── a_ValueFiltering  
+├── b_Kernel_and_DBSCAN
+├── c_Slicing_Approach
 📁 02 R compatibility  
 └── R_compatibility  
 ```
