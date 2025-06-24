@@ -1,25 +1,21 @@
-TODO:
-1. should include some nice pictures
-2. should add citations to papers
-3. should update the file structure (the names are a bit wrong)
-4. add license
-
 # Analyzing GPR and photogrammetry data in Python and R
-this project is an analysis of GPR (ground penetrating radar) data and photogrammetry data. 
+This project is an analysis of GPR (ground penetrating radar) data and photogrammetry data. 
 The goal is to retrieve specific signals that belong to tree roots 
 underground. The data was received in LAZ and PLY formats. In an 
 ideal situation, the code would generate a 3D visualisation of tree roots on a desired location that is georeferenced, 
 with preferably no signals of other clutter (pipes, watertanks, watertables, rocks etc.) that was picked up on by the GPR in the ground.
 However, situations are rarely ideal and therefore the following code is more or less a collection of
 attempts at achieving this 3D model instead of a solution. The attempts are listed in the 01_models folder. 
-It will be explained in further detail that some of the methods used are similar to
-literature, which will be cited. 
+
 ## Preprocessing
 Preprocessing encorporates the conversion of the GPR signal from the large original location to the desired section for which the analysis is conducted later. The file is assigned the coordinate system. Preprocessing is mainly about changing the format of the data in a 
 way that it can be easily visualized. _00_RetrievingGPRsignal.py_ attempts 
 to convert LAZ file of the larger area to LAS of the desired validation trench location and add a georeference to it. _00_VisualisingLAZ.py_
 explores how to best visualize a LAZ file. _00_VisualisingMesh.py_ experiments 
 with two ways of visualising a mesh validation trench file created through photogrammetry. 
+
+![Mesh vis](https://https://github.com/MichalBartek-14/ACT_Group6/tree/master/pictures/Mesh.png)
+
 ## Models
 The following three models are three attempts at retrieving/isolating tree root signals.
 ### 01a_ValueFiltering.py
