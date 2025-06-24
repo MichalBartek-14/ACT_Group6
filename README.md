@@ -14,7 +14,8 @@ to convert LAZ file of the larger area to LAS of the desired validation trench l
 explores how to best visualize a LAZ file. _00_VisualisingMesh.py_ experiments 
 with two ways of visualising a mesh validation trench file created through photogrammetry. 
 
-![Mesh vis](https://https://https://github.com/MichalBartek-14/ACT_Group6/blob/master/pictures/Mesh.png)
+![Mesh vis](https://github.com/MichalBartek-14/ACT_Group6/blob/master/pictures/Mesh.png)
+
 
 ## Models
 The following three models are three attempts at retrieving/isolating tree root signals.
