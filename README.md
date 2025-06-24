@@ -10,8 +10,8 @@ attempts at achieving this 3D model instead of a solution. The attempts are list
 ## Preprocessing
 Preprocessing encorporates the conversion of the GPR signal from the large original location to the desired section for which the analysis is conducted later. The file is assigned the coordinate system. Preprocessing is mainly about changing the format of the data in a 
 way that it can be easily visualized. _00_RetrievingGPRsignal.py_ attempts 
-to convert LAZ file of the larger area to LAS of the desired validation trench location and add a georeference to it. _00_VisualisingLAZ.py_
-explores how to best visualize a LAZ file. _00_VisualisingMesh.py_ experiments 
+to convert LAZ file of the larger area to LAS of the desired validation trench location and add a georeference to it. _00_Visualising_LoadingLaz.py_
+explores how to best visualize and load a LAZ/LAS files. _00_VisualisingMesh.py_ experiments 
 with two ways of visualising a mesh validation trench file created through photogrammetry. 
 
 ![Mesh vis](https://github.com/MichalBartek-14/ACT_Group6/blob/master/pictures/Mesh.png)
