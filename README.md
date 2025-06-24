@@ -34,6 +34,10 @@ that couldn't have belonged to roots.
 
 ![Mesh vis](https://github.com/MichalBartek-14/ACT_Group6/blob/master/pictures/01a_Value_Filtering.png)
 
+<div align="center">
+  <img src="https://github.com/MichalBartek-14/ACT_Group6/blob/master/pictures/01a_Value_Filtering.png?raw=true" alt="Mesh vis" width="300">
+</div>
+
 ### 01b_Kernel_and_DBSCAN.py
 
 This method attempts to detect the tree roots by identifying root edges which would be seen in the reflectivity signal between two volumes (soil and tree root). 
@@ -52,7 +56,9 @@ Once the voxels with sharp contrast are identified as potential root objects, th
 clusters. Since one root ideally shows similar values of the change (from soil to root) along its length the clustering should pick up its shape also laterally.
 DBSCAN clustering (with fine tuned parameters) should thus potentially separate independent root instances.
 
-![Edge vis](https://github.com/MichalBartek-14/ACT_Group6/blob/master/pictures/01b_Edge.png)
+<div align="center">
+  <img src="https://https://github.com/MichalBartek-14/ACT_Group6/blob/master/pictures/01b_Edge.png?raw=true" alt="Edge vis" width="300">
+</div>
 
 ### 01c_Slicing_Approach.py
 
@@ -60,8 +66,6 @@ Approach 01C similarly to 01B uses voxels as method to deal with the noise and m
 After the voxels are computed the z-gradient is computed, however contrary to the 01B, the z-gradient is not manually computed with the convolution kernel , but
 with **Sobel** operator that is run on the XZ, YZ slices of the data retrieved from the point cloud.
 This method also considers the magnitude of the z-gradient and Sobel computes gradients along both axes since it works from 2D slices.
-
-![Slice vis](https://github.com/MichalBartek-14/ACT_Group6/blob/master/pictures/01c_Slices.png)
 
 <div align="center">
   <img src="https://github.com/MichalBartek-14/ACT_Group6/blob/master/pictures/01c_Slices.png?raw=true" alt="Slice vis" width="300">
